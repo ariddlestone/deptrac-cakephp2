@@ -1,0 +1,19 @@
+{
+    "name": "ariddlestone/deptrac-cakephp2",
+    "description": "An extension to help analyse CakePHP 2 projects with Deptrac",
+    "keywords": ["cakephp2", "deptrac"],
+    "authors": [
+        {
+            "name": "Andrew Riddlestone"
+        }
+    ],
+    "license": "GPL-3.0-only",
+    "require": {
+        "deptrac/deptrac": "^4.6"
+    },
+    "scripts": {
+        "download-cakephp2": [
+            "composer create-project --ignore-platform-reqs --no-audit --no-install cakephp/cakephp cakephp2 ^2.10.24"
+        ]
+    }
+}
