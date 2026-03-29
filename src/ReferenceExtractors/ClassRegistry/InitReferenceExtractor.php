@@ -6,34 +6,28 @@ use ClassRegistry;
 use Deptrac\Deptrac\Contract\Ast\AstMap\ClassLikeToken;
 use Deptrac\Deptrac\Contract\Ast\AstMap\DependencyType;
 use Deptrac\Deptrac\Contract\Ast\AstMap\ReferenceBuilderInterface;
-use Deptrac\Deptrac\Contract\Ast\PHPStanReferenceExtractorInterface;
+use Deptrac\Deptrac\Contract\Ast\NikicReferenceExtractorInterface;
+use Deptrac\Deptrac\Contract\Ast\TypeScope;
 use PhpParser\Node;
 use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
-use PHPStan\Analyser\MutatingScope;
 
 /**
- * @implements PHPStanReferenceExtractorInterface<StaticCall>
+ * @implements NikicReferenceExtractorInterface<StaticCall>
  */
-class InitReferenceExtractor implements PHPStanReferenceExtractorInterface
+class InitReferenceExtractor implements NikicReferenceExtractorInterface
 {
     public function getNodeType(): string
     {
         return StaticCall::class;
     }
 
-    /**
-     * @param StaticCall $node
-     * @param ReferenceBuilderInterface $referenceBuilder
-     * @param MutatingScope $scope
-     * @return void
-     */
-    public function processNodeWithPhpStanScope(
+    public function processNode(
         Node $node,
         ReferenceBuilderInterface $referenceBuilder,
-        MutatingScope $scope,
+        TypeScope $typeScope,
     ): void {
         if ($node->class->name != ClassRegistry::class) {
             return;

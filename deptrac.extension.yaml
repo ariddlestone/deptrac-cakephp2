@@ -1,0 +1,4 @@
+services:
+  - class: ARiddlestone\DeptracCakePhp2\ReferenceExtractors\ClassRegistry\InitReferenceExtractor
+    tags:
+      - name: reference_extractors
