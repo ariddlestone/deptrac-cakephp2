@@ -13,7 +13,8 @@
     },
     "scripts": {
         "download-cakephp2": "composer create-project --ignore-platform-reqs --no-audit --no-install cakephp/cakephp cakephp2 ^2.10.24",
-        "extract-phpstan": "@php -r '(new Phar(\"vendor/phpstan/phpstan/phpstan.phar\"))->extractTo(\"phpstan\");'"
+        "extract-phpstan": "@php -r '(new Phar(\"vendor/phpstan/phpstan/phpstan.phar\"))->extractTo(\"phpstan\");'",
+        "test": "phpunit"
     },
     "autoload": {
         "psr-4": {
