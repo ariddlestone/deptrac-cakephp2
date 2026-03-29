@@ -4,9 +4,9 @@ namespace ARiddlestone\DeptracCakePhp2\Tests\ReferenceExtractors\ClassRegistry;
 
 use ARiddlestone\DeptracCakePhp2\ReferenceExtractors\ClassRegistry\InitReferenceExtractor;
 use Deptrac\Deptrac\Core\Ast\Parser\Cache\AstFileReferenceInMemoryCache;
-use Deptrac\Deptrac\DefaultBehavior\Ast\Parser\Helpers\PhpStanContainerDecorator;
-use Deptrac\Deptrac\DefaultBehavior\Ast\Parser\PhpStanParser;
+use Deptrac\Deptrac\DefaultBehavior\Ast\Parser\NikicPhpParser;
 use ModelClass;
+use PhpParser\ParserFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +17,7 @@ class InitReferenceExtractorTest extends TestCase
     #[DataProvider('getFilePaths')]
     public function testClassRegistryInit(string $filePath): void
     {
-        $parser = $this->createPhpStanParser($filePath);
+        $parser = $this->createParser($filePath);
         $astFileReference = $parser->parseFile($filePath);
         $astClassReferences = $astFileReference->classLikeReferences;
         self::assertCount(1, $astClassReferences[1]->dependencies);
@@ -41,7 +41,7 @@ class InitReferenceExtractorTest extends TestCase
     #[DataProvider('getFailingFilePaths')]
     public function testClassRegistryInitFailing(string $filePath): void
     {
-        $parser = $this->createPhpStanParser($filePath);
+        $parser = $this->createParser($filePath);
         $astFileReference = $parser->parseFile($filePath);
         $astClassReferences = $astFileReference->classLikeReferences;
         self::assertCount(0, $astClassReferences[1]->dependencies);
@@ -57,16 +57,17 @@ class InitReferenceExtractorTest extends TestCase
         ];
     }
 
-    private function createPhpStanParser(string $filePath): PhpStanParser
+    private function createParser(string $filePath): NikicPhpParser
     {
-        $phpStanContainer = new PhpStanContainerDecorator(dirname($filePath), dirname($filePath), [$filePath]);
         $cache = new AstFileReferenceInMemoryCache();
         $extractors = [
             new InitReferenceExtractor(),
         ];
 
-        return new PhpStanParser($phpStanContainer, $cache, $extractors);
+        return new NikicPhpParser(
+            (new ParserFactory())->createForNewestSupportedVersion(),
+            $cache,
+            $extractors,
+        );
     }
-
-
 }
